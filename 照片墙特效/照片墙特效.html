@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: none;
+            list-style: none;
+        }
+
+        html, body, ul {
+            width: 100%;
+            height: 100%;
+        }
+
+        #box {
+            position: relative;
+        }
+
+        #box li {
+            width: 250px;
+            height: 350px;
+            position: absolute;
+            box-shadow: 0 0 10px #000;
+            transition: all 1s;
+
+        }
+
+        #box li img {
+            width: 250px;
+            height: 350px;
+        }
+
+        #box li.current {
+            left: 50% !important;
+            top: 50% !important;
+            transform: rotate(0deg) translate(-50%, -50%) scale(1.5 ,1.5) !important;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+<ul id="box"></ul>
+<script src="Underscore/Underscore-min.js"></script>
+<script>
+    window.onload = function () {
+        var box = document.getElementById("box");
+        for (var i = 0; i < 22; i++) {
+            var li = document.createElement("li");
+            box.appendChild(li);
+            var img = document.createElement("img");
+            img.src = "images/" + i + ".jpg";
+            li.appendChild(img);
+
+        }
+        var allLis = document.getElementsByTagName("li");
+        var screenW = document.documentElement.clientWidth - 250;
+        var screenH = document.documentElement.clientHeight - 350;
+
+        for (var j = 0; j < allLis.length; j++) {
+            var ji = allLis[j];
+            ji.style.left = _.random(0, screenW) + 'px';
+            ji.style.top = _.random(0, screenH) + 'px';
+
+            ji.style.transform = 'rotate(' + _.random(0, 360) + 'deg)';
+            ji.onclick = function () {
+                for (var i = 0; i < allLis.length; i++) {
+                    allLis[i].className = '';
+                }
+                this.className = 'current';
+            }
+
+
+        }
+    }
+</script>
+</body>
+</html>

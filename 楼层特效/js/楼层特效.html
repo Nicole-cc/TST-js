@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            border: none;
+        }
+        html,body,ul{
+            width: 100%;
+            height: 100%;
+        }
+        ul li{
+            width: 100%;
+            height: 100%;
+        }
+        ol{
+            width: 80px;
+            border: 1px solid #fff;
+            position: fixed;
+            left: 50px;
+            top: 250px;
+            background-color: #ccc;
+
+        }
+        ol li{
+            border-bottom: 1px solid #ffffff;
+            width: 100%;
+            line-height: 30px;
+            font-size: 20px;
+            color: #fff;
+            text-align: center;
+            cursor:pointer;
+
+        }
+        ol li.current{
+            background-color: orangered;
+        }
+    </style>
+</head>
+<body>
+<ul id="ul">
+    <li ></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<ol id="ol">
+    <li class="current">第1层</li>
+    <li>第2层</li>
+    <li>第3层</li>
+    <li>第4层</li>
+    <li>第5层</li>
+</ol>
+<script src="myFunc.js"></script>
+<script>
+window.onload=function () {
+    //1.拿到所有标签
+    var ul=$('ul');
+    var ol=$('ol');
+    var ulLis=ul.children;
+    var olLis=ol.children;
+    var isClick=false;
+    //2.填充颜色
+    var colorArr=["red","yellow","pink","purple","blue"];
+    for(var i=0;i<ulLis.length;i++){
+        ulLis[i].style.backgroundColor=colorArr[i];
+    }
+    //3.跟踪点击
+    for(var j=0;j<olLis.length;j++){
+        (function (index) {
+            olLis[index].onmousedown=function () {
+                isClick=true;
+                for(var i =0;i<olLis.length;i++){
+                    olLis[i].className=""
+                }
+                this.className="current";
+                buffer(document.documentElement,{"scrollTop":index*client().height},function () {
+                    isClick=false;
+                })
+            }
+        })(j)
+    }
+    //4.跟踪滚动
+    window.onscroll=function(){
+        if(!isClick){
+            var roll=Math.ceil(scroll().top);
+            for(var i=0;i<olLis.length;i++){
+                if(roll>=ulLis[i].offsetTop){
+                    for(var j=0;j<olLis.length;j++){
+                        olLis[j].className=""
+                    }
+                    olLis[i].className="current"
+                }
+            }
+        }
+    }
+
+}
+</script>
+</body>
+</html>

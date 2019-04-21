@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            border:none;
+            list-style:none;
+        }
+        #box{
+            width: 1500px;
+            height: 350px;
+            border: 1px solid #ccc;
+            position: relative;
+            margin: 100px auto;
+            overflow: hidden;
+        }
+        #box_top ul{
+            width: 3200px;
+            height: 250px;
+            position: relative;
+            top: 10px;
+            left: 10px;
+
+        }
+        #box_top ul li{
+            float: left;
+            width: 300px;
+            height: 100%;
+            padding-left: 10px;
+        }
+        #box_top ul li img{
+            width: 250px;
+
+        }
+        #box_bottom{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background-color: #ccc;
+            width: 100%;
+            height: 45px;
+        }
+         #mask{
+             width: 100px;
+             height: 100%;
+             background-color: orangered;
+             position: absolute;
+             left: 0;
+             top: 0;
+             border-radius: 50px;
+             cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <div id="box_top">
+        <ul>
+            <li><img src="images/1.jpg" alt=""></li>
+            <li><img src="images/2.jpg" alt=""></li>
+            <li><img src="images/3.jpg" alt=""></li>
+            <li><img src="images/4.jpg" alt=""></li>
+            <li><img src="images/5.jpg" alt=""></li>
+            <li><img src="images/6.jpg" alt=""></li>
+            <li><img src="images/7.jpg" alt=""></li>
+            <li><img src="images/8.jpg" alt=""></li>
+            <li><img src="images/9.jpg" alt=""></li>
+            <li><img src="images/10.jpg" alt=""></li>
+        </ul>
+    </div>
+    <div id="box_bottom">
+        <div id="mask"></div>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        //        1.获得标签
+        var box = document.getElementById("box");
+        var box_top = document.getElementById("box_top");
+        var box_bottom = document.getElementById("box_bottom");
+        var mask = document.getElementById("mask");
+
+        var ul = $("box_top").children[0];
+        var allLis = ul.children;
+
+        /* 2.设置滚动条的长度
+        滚动条长度 = ( 盒子的宽度 / 内容的宽度) * 盒子的宽度*/
+        var length = (box.offsetWidth / ul.offsetWidth) * box.offsetWidth;
+        mask.style.width = length + 'px';
+//         3.鼠标操作
+        mask.onmousedown = function (event) {
+            var e = event || window.event;
+
+            var begin = e.clientX - mask.offsetLeft;
+            console.log(begin);
+            //移动
+            document.onmousemove = function (event) {
+                var e = event || window.event;
+                var endX = e.clientX - begin;
+                if (endX < 0) {
+                    endX = 0;
+                } else if (endX > box_bottom.offsetWidth - mask.offsetWidth) {
+                    endX = box_bottom.offsetWidth - mask.offsetWidth;
+                }
+                mask.style.left = endX + 'px';
+                // 内容走的距离 = （内容的长度 - 盒子的长度） \/ (盒子长度 - 滚动条的长度) * 滚动条走的距离
+                var con_dis = (ul.offsetWidth - box.offsetWidth) / (box.offsetWidth - mask.offsetWidth) * endX;
+                ul.style.left = -con_dis + 'px'
+            };
+            document.onmouseup = function () {
+                document.onmousemove = null;
+            };
+        }
+
+    }
+</script>
+<script src="myFunc.js"></script>
+</body>
+</html>
